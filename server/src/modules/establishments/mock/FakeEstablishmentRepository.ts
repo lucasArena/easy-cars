@@ -33,6 +33,18 @@ class EstablishmentRepository implements IEstablismentRepository {
     this.repository[findIndex] = establishment;
     return establishment;
   }
+
+  public async delete(id: string): Promise<Establishment | undefined> {
+    const findedIndex = this.repository.findIndex(
+      findEstablishment => findEstablishment.id === id,
+    );
+
+    const establishment = this.repository[findedIndex];
+
+    delete this.repository[findedIndex];
+
+    return establishment;
+  }
 }
 
 export default EstablishmentRepository;

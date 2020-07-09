@@ -9,7 +9,7 @@ let fakeEstablishmentRepository: FakeEstablishmentRepository;
 let cnpjCPFValidatorProvider: CNPJCPFValidatorProvider;
 let createEstablishmentService: CreateEstablishmentService;
 
-describe('CreateSessionService', () => {
+describe('CreateEstablishmentsService', () => {
   beforeEach(() => {
     fakeEstablishmentRepository = new FakeEstablishmentRepository();
     cnpjCPFValidatorProvider = new CNPJCPFValidatorProvider();

@@ -2,7 +2,7 @@ import { Repository, getRepository } from 'typeorm';
 
 import IUserRepository from '@interfaces/users/IUserRepository';
 import ICreateUser from '@interfaces/users/ICreateUser';
-import User from '../entities/typeorm/User';
+import User from './entities/User';
 
 class UserRepository implements IUserRepository {
   private repository: Repository<User>;

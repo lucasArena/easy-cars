@@ -10,7 +10,7 @@ class CreateEstablishmentService {
   constructor(
     @inject('EstablishmentRepository')
     private establishmentRepository: IEstablismentRepository,
-    @inject('EstablishmentRepository')
+    @inject('CNPJCPFValidatorProvider')
     private validatorCNPJCPFValidatorProvider: ICNPJCPFValidatorProvider,
   ) { }
 

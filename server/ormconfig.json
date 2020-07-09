@@ -2,7 +2,7 @@
   "type": "sqlite",
   "database": "./database.sqlite",
   "entities": [
-    "./src/modules/**/entities/typeorm/*.ts"
+    "./src/modules/**/repositories/typeorm/entities/*.ts"
   ],
   "migrations": [
     "./src/shared/database/migrations/*.ts"

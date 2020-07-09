@@ -31,8 +31,16 @@ class UserRepository implements IEstablismentRepository {
     return establishment;
   }
 
-  public async save(user: Establishment): Promise<Establishment> {
+  public async save(user: Omit<Establishment, 'cnpj'>): Promise<Establishment> {
     return this.repository.save(user);
+  }
+
+  public async delete(id: string): Promise<Establishment | undefined> {
+    const establishment = await this.repository.findOne(id);
+
+    await this.repository.delete(id);
+
+    return establishment;
   }
 }
 
