@@ -12,7 +12,7 @@ Conheça: www.fcamara.com.br
 </h1>
 
 <h4 align="center">
-  Animations and Gestures Manipulation Heavy React Native App
+  App to control the check in and check out of vehicles
 </h4>
 <p align="center">
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/lukemorales/react-native-design-code.svg">
