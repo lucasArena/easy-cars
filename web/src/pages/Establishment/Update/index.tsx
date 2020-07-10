@@ -2,7 +2,6 @@ import React, { useCallback, useRef, useEffect, useState } from 'react';
 import { useHistory, withRouter, useParams } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
-import { cnpj } from 'cpf-cnpj-validator';
 
 import { FiUser, FiMap, FiPhone, FiRefreshCcw, FiHome } from 'react-icons/fi';
 import { Container, Content, Form } from './styles';
