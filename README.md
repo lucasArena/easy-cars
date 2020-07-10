@@ -1,9 +1,3 @@
-### FCamara 🚀
-*"Queremos ser como uma árvore, 
-  crescer um pouco todos os dias e tentar tocar o céu, 
-  sem perder a solidez de nossas raízes."*
-Conheça: www.fcamara.com.br
-
 <h1 align="center">
     <img alt="Design+Code" src="https://res.cloudinary.com/lucasarena/image/upload/v1586864237/Icons/typescript_ey1iu6.png" width="200" />
     <img alt="Design+Code" src="https://res.cloudinary.com/lucasarena/image/upload/v1586733217/Icons/react-icon_eoqw5q.png" width="350" />
