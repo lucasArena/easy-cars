@@ -165,6 +165,15 @@ Content-Type: application/json
 }
 ```
 
+All of the routes below needs to have the header "Authorization" : "Bearer {jsonwebtoken}", even thought the server will block the request
+
+```bash
+# Header to add jsonwebtoken
+
+Authorization:  Bearer --jsonwebtoken--
+Accept: application/json
+```
+
 ### Establishments
 **Request:**
 ```json
