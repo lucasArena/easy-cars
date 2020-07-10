@@ -535,12 +535,7 @@ Content-Type: application/json
 }
 ```
 
-## :memo: License
-This project is under the MIT license. See the [LICENSE](https://github.com/lukemorales/react-native-design-code/blob/master/LICENSE) for more information.
-
----
-
-Made with ♥ by Lucas Arena :wave: [Get in touch!](https://www.linkedin.com/in/lukemorales/)
+Made with ♥ by Lucas Arena :wave: [Get in touch!](https://www.linkedin.com/in/lucas-arena-771959136/)
 
 [nodejs]: https://nodejs.org/
 [yarn]: https://yarnpkg.com/
