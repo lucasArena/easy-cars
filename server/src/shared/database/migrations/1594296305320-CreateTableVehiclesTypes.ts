@@ -50,6 +50,6 @@ export default class CreateTableVehiclesTypes1594296305320
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    queryRunner.dropTable('vehicle_types');
+    await queryRunner.dropTable('vehicle_types');
   }
 }

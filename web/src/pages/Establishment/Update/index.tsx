@@ -37,15 +37,15 @@ const UpdateEstablishment: React.FC = () => {
       formRef.current?.setErrors([]);
       try {
         const formattedData = {
-          ...data,
-          cnpj: data.cnpj && data.cnpj.replace(/[^0-9]/g, ''),
+          name: data.name,
+          address: data.address,
+          phone: data.phone,
+          quantity_motorcycles: data.quantity_motorcycles,
+          quantity_cars: data.quantity_cars,
         };
 
         const schema = Yup.object().shape({
           name: Yup.string().required('Nome obrigatório'),
-          cnpj: Yup.string()
-            .test('test-cnpj', 'CNPJ Inválido', (value) => cnpj.isValid(value))
-            .required('CNPJ obrigatório'),
           address: Yup.string().required('Endereço obrigatório'),
           phone: Yup.string().required('Telefone obrigatório'),
           quantity_motorcycles: Yup.number().required(

@@ -31,7 +31,6 @@ router.put(
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
-      cnpj: Joi.number().required(),
       address: Joi.string().required(),
       phone: Joi.string().required(),
       quantity_motorcycles: Joi.number().required(),
