@@ -6,25 +6,23 @@ interface ContainerProps {
   isFocused?: boolean;
   isFilled?: boolean;
   isErrored?: boolean;
+  disabled?: boolean;
 }
 
 export const Container = styled.div<ContainerProps>`
-  > div {
-    width: 100%;    
-    > div {
-      
-      border-radius: 10px;
-      border: 2px solid ${({ theme }) => theme.colors.background};         
-      color: ${({ theme }) => theme.colors.placeholder};      
+  background: ${({ theme }) => theme.colors.background};
+  border-radius: 10px;
+  border: 2px solid ${({ theme }) => theme.colors.background};
+  padding: 16px;
+  width: 100%;
+  color: ${({ theme }) => theme.colors.placeholder};
+  opacity: ${(props) => (props.disabled ? 0.4 : 1)};
 
-      .react-select__single-value {      
-        color: ${({ theme }) => theme.colors.placeholder};      
-      }
-    }
-  }
+  display: flex;
+  align-items: center;
 
   & + div {
-    margin-top: 10px;
+    margin-top: 8px;
   }
 
   ${(props) =>

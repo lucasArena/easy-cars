@@ -2,11 +2,13 @@ import React, { useCallback, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
+import { cnpj } from 'cpf-cnpj-validator';
 
-import { FiUser, FiMap, FiHome, FiPhone, FiRefreshCcw } from 'react-icons/fi';
+import { FiUser, FiMap, FiRefreshCcw, FiPhone } from 'react-icons/fi';
 import { Container, Content, Form } from './styles';
 
 import Input from '../../../components/Input';
+import InputMask from '../../../components/InputMask';
 import Button from '../../../components/Button';
 import Header from '../../../components/Header';
 import api from '../../../services/api';
@@ -16,7 +18,7 @@ import getValidationErrors from '../../../utils/getValidationErrors';
 
 interface CreateFormData {
   name: string;
-  cnpj: number;
+  cnpj: string;
   address: string;
   phone: string;
   quantity_motorcycles: number;
@@ -32,11 +34,18 @@ const CreateEstablish: React.FC = () => {
     async (data: CreateFormData) => {
       formRef.current?.setErrors([]);
       try {
+        const formattedData = {
+          ...data,
+          cnpj: Number(data.cnpj.replace(/[^0-9]/g, '')),
+        };
+
         const schema = Yup.object().shape({
           name: Yup.string().required('Nome obrigatório'),
-          cnpj: Yup.number().required('CNPJ obrigatório'),
+          cnpj: Yup.string()
+            .test('test-cnpj', 'CNPJ Inválido', (value) => cnpj.isValid(value))
+            .required('CNPJ obrigatório'),
           address: Yup.string().required('Endereço obrigatório'),
-          phone: Yup.number().required('Telefone obrigatório'),
+          phone: Yup.string().required('Telefone obrigatório'),
           quantity_motorcycles: Yup.number().required(
             'Quantidade de motos obrigatória',
           ),
@@ -45,16 +54,15 @@ const CreateEstablish: React.FC = () => {
           ),
         });
 
-        await schema.validate(data, {
+        await schema.validate(formattedData, {
           abortEarly: false,
         });
 
-        await api.post('/establishments', data);
+        await api.post('/establishments', formattedData);
 
         addToast({
           type: 'success',
           title: 'Cadastro realizado',
-          description: 'Você já pode fazer seu logon no GoBarber',
         });
 
         history.push('/establishments');
@@ -80,9 +88,22 @@ const CreateEstablish: React.FC = () => {
           <h1>Cadastro de estabelecimento</h1>
 
           <Input type="text" name="name" icon={FiUser} placeholder="Nome" />
-          <Input type="text" name="cnpj" icon={FiHome} placeholder="CNPJ" />
+          <InputMask
+            type="text"
+            icon={FiMap}
+            name="cnpj"
+            placeholder="CNPJ"
+            mask="99.999.999/9999-99"
+            alwaysShowMask={false}
+          />
           <Input name="address" icon={FiMap} placeholder="Endereço" />
-          <Input name="phone" icon={FiPhone} placeholder="Telefone" />
+          <InputMask
+            name="phone"
+            icon={FiPhone}
+            placeholder="Telefone"
+            mask="99 99999-9999"
+            alwaysShowMask={false}
+          />
           <Input
             type="number"
             name="quantity_motorcycles"

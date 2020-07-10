@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import ReactSelect, {
   OptionTypeBase,
   Props as SelectProps,
@@ -10,33 +10,53 @@ import { Container } from './styles';
 interface Props extends SelectProps<OptionTypeBase> {
   name: string;
 }
-const Select: React.FC<Props> = ({ name, ...rest }) => {
+const Select: React.FC<Props> = ({ name, options, ...rest }) => {
   const selectRef = useRef(null);
   const { fieldName, defaultValue, registerField } = useField(name);
+
+  const [selected, setSelected] = useState(defaultValue || '');
+
+  const handleSelect = useCallback((e) => {
+    return setSelected(e.value);
+  }, []);
+
+  useEffect(() => {
+    setSelected(defaultValue || '');
+  }, [defaultValue]);
+
   useEffect(() => {
     registerField({
       name: fieldName,
       ref: selectRef.current,
-      getValue: (ref: any) => {
-        if (rest.isMulti) {
-          if (!ref.state.value) {
-            return [];
-          }
-          return ref.state.value.map((option: OptionTypeBase) => option.value);
-        }
-        if (!ref.state.value) {
-          return '';
-        }
-        return ref.state.value.value;
-      },
+      path: 'props.value.value',
     });
   }, [fieldName, registerField, rest.isMulti]);
+
   return (
     <Container>
       <ReactSelect
-        defaultValue={defaultValue}
+        value={
+          selected &&
+          options &&
+          options.find((option) => option.value === selected)
+        }
+        onChange={(e) => handleSelect(e)}
+        options={options}
         ref={selectRef}
         classNamePrefix="react-select"
+        styles={{
+          control: (styles) => ({
+            ...styles,
+            height: 57,
+            borderRadius: 10,
+            background: '#232129',
+          }),
+          option: (styles) => ({
+            ...styles,
+            height: 57,
+            color: '#666360',
+          }),
+        }}
         {...rest}
       />
     </Container>

@@ -23,8 +23,9 @@ const Header: React.FC = () => {
         </Profile>
 
         <Menu>
+          <Link to="/dashboard">Entradas/Saídas</Link>
           <Link to="/establishments">Estabelecimentos</Link>
-          <Link to="vehicles">Veículos</Link>
+          <Link to="/vehicles">Veículos</Link>
         </Menu>
 
         <button type="button" onClick={signOut}>

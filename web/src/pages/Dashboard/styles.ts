@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { Form as UnformForm } from '@unform/web';
+import { shade } from 'polished';
 
 export const Container = styled.div``;
 
@@ -72,7 +74,7 @@ export const TransactionItem = styled.div`
 export const TransactionResults = styled.aside`
   width: 380px;
 
-  div {
+  > div {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -90,6 +92,29 @@ export const TransactionResults = styled.aside`
     margin-top: 20px;
   }
 `;
+
+export const Form = styled(UnformForm)`
+  width: 340px;
+  text-align: center;
+
+  h3 {
+    margin-bottom: 14px;
+  }
+
+  > a {
+    color: ${({ theme }) => theme.colors.text};
+    display: block;
+    margin-top: 24px;
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+      color: ${({ theme }) => shade(0.2, theme.colors.text)};
+    }
+  }
+`;
+
+export const DateFilter = styled.div``;
 
 export const TotalTransactions = styled.div`
   div {

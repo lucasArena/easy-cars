@@ -6,11 +6,17 @@ import ListTransactionsByDayService from '../services/ListTransactionsByDayServi
 
 class TransactionsController {
   public async index(request: Request, response: Response): Promise<Response> {
+    const { day, month, year } = request.query;
+
     const listTransactionsByDayService = container.resolve(
       ListTransactionsByDayService,
     );
 
-    const transactions = await listTransactionsByDayService.execute();
+    const transactions = await listTransactionsByDayService.execute({
+      day: Number(day),
+      month: Number(month),
+      year: Number(year),
+    });
 
     return response.json(transactions);
   }

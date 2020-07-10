@@ -3,6 +3,12 @@ import { inject, injectable } from 'tsyringe';
 import ITransactionsRepository from '@interfaces/transactions/ITransactionsRepository';
 import ITransaction from '@interfaces/transactions/ITransaction';
 
+interface IRequestProps {
+  day: number;
+  month: number;
+  year: number;
+}
+
 @injectable()
 class ListTransactionsByDayService {
   constructor(
@@ -10,11 +16,15 @@ class ListTransactionsByDayService {
     private transactionsRepository: ITransactionsRepository,
   ) { }
 
-  public async execute(): Promise<ITransaction[]> {
+  public async execute({
+    day,
+    month,
+    year,
+  }: IRequestProps): Promise<ITransaction[]> {
     const transactions = await this.transactionsRepository.index({
-      day: 11,
-      month: 10,
-      year: 2020,
+      day,
+      month,
+      year,
     });
 
     return transactions;

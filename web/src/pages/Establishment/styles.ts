@@ -64,6 +64,7 @@ export const TransactionItem = styled.div`
     strong {
       margin-left: 24px;
       color: #fff;
+      max-width: 400px;
     }
 
     span {

@@ -1,4 +1,10 @@
-import React, { useCallback, useRef } from 'react';
+import React, {
+  useCallback,
+  useRef,
+  useEffect,
+  useState,
+  useMemo,
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
@@ -6,7 +12,9 @@ import * as Yup from 'yup';
 import { FiBriefcase, FiPenTool, FiSquare, FiTruck } from 'react-icons/fi';
 import { Container, Content, Form } from './styles';
 
+import Select from '../../../components/Select';
 import Input from '../../../components/Input';
+import InputMask from '../../../components/InputMask';
 import Button from '../../../components/Button';
 import Header from '../../../components/Header';
 import api from '../../../services/api';
@@ -22,7 +30,14 @@ interface CreateFormData {
   type: string;
 }
 
+interface TypesProps {
+  id: string;
+  name: string;
+}
+
 const CreateVehicle: React.FC = () => {
+  const [types, setTypes] = useState<TypesProps[]>([]);
+
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
   const history = useHistory();
@@ -66,6 +81,30 @@ const CreateVehicle: React.FC = () => {
     [addToast, history],
   );
 
+  const formattedTypes = useMemo(() => {
+    return types.map((type) => ({
+      value: type.id,
+      label: type.name,
+    }));
+  }, [types]);
+
+  useEffect(() => {
+    async function handleLoadTypes(): Promise<void> {
+      try {
+        const response = await api.get(`/vehicles/types`);
+        setTypes(response.data);
+      } catch (err) {
+        addToast({
+          type: 'error',
+          title: 'Erro ao tentar buscar os tipos',
+          description: 'Tente novamente mais tarde!',
+        });
+      }
+    }
+
+    handleLoadTypes();
+  }, [addToast]);
+
   return (
     <Container>
       <Header />
@@ -86,8 +125,19 @@ const CreateVehicle: React.FC = () => {
             placeholder="Modelo"
           />
           <Input name="color" icon={FiPenTool} placeholder="Cor" />
-          <Input name="plate" icon={FiSquare} placeholder="Placa" />
-          <Input name="type_id" icon={FiTruck} placeholder="Tipo" />
+          <InputMask
+            icon={FiSquare}
+            name="plate"
+            placeholder="Placa"
+            maskChar=""
+            mask="aaa-9999"
+          />
+          <Select
+            name="type_id"
+            icon={FiTruck}
+            placeholder="Tipo"
+            options={formattedTypes}
+          />
 
           <Button type="submit">Salvar</Button>
         </Form>

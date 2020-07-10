@@ -1,8 +1,16 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+  useRef,
+} from 'react';
 import { format, parseISO, getHours } from 'date-fns';
-
-import { FiClock } from 'react-icons/fi';
+import { FiClock, FiCalendar } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { FormHandles } from '@unform/core';
+import * as Yup from 'yup';
+
 import Header from '../../components/Header';
 
 import {
@@ -11,6 +19,8 @@ import {
   TransactionList,
   TransactionResults,
   TransactionItem,
+  Form,
+  DateFilter,
   TotalTransactions,
   TransactionsPerHour,
 } from './styles';
@@ -19,6 +29,8 @@ import { useToast } from '../../hooks/toast';
 
 import api from '../../services/api';
 import Button from '../../components/Button';
+import InputMask from '../../components/InputMask';
+import getValidationErrors from '../../utils/getValidationErrors';
 
 interface Transaction {
   id: string;
@@ -33,12 +45,67 @@ interface Transaction {
   formattedType?: string;
 }
 
+interface PropsDateFilterForm {
+  selectedDate: string;
+}
+
 const Dashboard: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [selectedDate] = useState(new Date());
+
+  const formFilterRef = useRef<FormHandles>(null);
 
   const { addToast } = useToast();
 
   const eachHour = Array.from({ length: 24 }, (_, index) => index + 1);
+
+  const handleSubmit = useCallback(
+    async (formDataFilter: PropsDateFilterForm) => {
+      formFilterRef.current?.setErrors([]);
+      try {
+        const schema = Yup.object().shape({
+          selectedDate: Yup.string()
+            .matches(
+              /^(0?[1-9]|[12][0-9]|3[01])[/-](0?[1-9]|1[012])[/-]\d{4}$/,
+              'Data no formato inválido (DD/MM/YYYY)',
+            )
+            .required('Data obrigatória'),
+        });
+
+        await schema.validate(formDataFilter, {
+          abortEarly: false,
+        });
+
+        const dateParts = formDataFilter.selectedDate.split('/');
+        const convertedDate = new Date(
+          Number(dateParts[2]),
+          Number(dateParts[1]),
+          Number(dateParts[0]),
+        );
+
+        const response = await api.get('/transactions', {
+          params: {
+            day: convertedDate.getDate(),
+            month: convertedDate.getMonth(),
+            year: convertedDate.getFullYear(),
+          },
+        });
+
+        setTransactions(response.data);
+      } catch (err) {
+        const errors = getValidationErrors(err);
+        formFilterRef.current?.setErrors(errors);
+
+        addToast({
+          title: 'Erro',
+          description:
+            'Ocorreu um erro para filtrar por data, tente novamente!',
+          type: 'error',
+        });
+      }
+    },
+    [addToast],
+  );
 
   const checkInQuantity = useMemo(() => {
     return transactions.filter(({ type }) => type === 'in').length;
@@ -83,10 +150,20 @@ const Dashboard: React.FC = () => {
     }));
   }, [transactions]);
 
+  const formattedDate = useMemo(() => {
+    return format(selectedDate, 'dd/MM/yyyy');
+  }, [selectedDate]);
+
   useEffect(() => {
     async function handleLoadTransactions(): Promise<void> {
       try {
-        const response = await api.get('/transactions');
+        const response = await api.get('/transactions', {
+          params: {
+            day: selectedDate.getDate(),
+            month: selectedDate.getMonth() + 1,
+            year: selectedDate.getFullYear(),
+          },
+        });
 
         setTransactions(response.data);
       } catch (error) {
@@ -99,7 +176,7 @@ const Dashboard: React.FC = () => {
     }
 
     handleLoadTransactions();
-  }, [addToast]);
+  }, [addToast, selectedDate]);
 
   return (
     <Container>
@@ -132,6 +209,23 @@ const Dashboard: React.FC = () => {
         </TransactionList>
 
         <TransactionResults>
+          <DateFilter>
+            <h3>Filtrar por data</h3>
+
+            <Form
+              onSubmit={handleSubmit}
+              ref={formFilterRef}
+              initialData={{ selectedDate: formattedDate }}
+            >
+              <InputMask
+                name="selectedDate"
+                icon={FiCalendar}
+                type="calendar"
+                mask="99/99/9999"
+              />
+              <Button type="submit">Filtrar por data</Button>
+            </Form>
+          </DateFilter>
           <TotalTransactions>
             <h3>Total</h3>
             <div>

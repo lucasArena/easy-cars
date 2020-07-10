@@ -11,6 +11,7 @@ const establishmentsController = new EstablishmentsController();
 router.use(ensureAuthenticated);
 
 router.get('/', establishmentsController.index);
+router.get('/:id', establishmentsController.find);
 router.post(
   '/',
   celebrate({

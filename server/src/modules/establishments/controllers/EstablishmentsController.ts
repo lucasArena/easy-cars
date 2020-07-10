@@ -2,6 +2,7 @@ import { container } from 'tsyringe';
 
 import { Request, Response } from 'express';
 import CreateEstablishmentService from '../services/CreateEstablishmentService';
+import ListOneEstablishmentService from '../services/ListOneEstablishmentService';
 import ListAllEstablishmentsService from '../services/ListAllEstablishmentsService';
 import UpdateEstablishmentsService from '../services/UpdateEstablishmentsService';
 import DeleteEstablishmentsService from '../services/DeleteEstablishmentsService';
@@ -15,6 +16,20 @@ class EstablishmentsController {
     const establishments = await listAllEstablishmentsService.execute();
 
     return response.json(establishments);
+  }
+
+  public async find(request: Request, response: Response): Promise<Response> {
+    const { id } = request.params;
+
+    const listOneEstablishmentService = container.resolve(
+      ListOneEstablishmentService,
+    );
+
+    const establishment = await listOneEstablishmentService.execute({
+      id: String(id),
+    });
+
+    return response.json(establishment);
   }
 
   public async create(request: Request, response: Response): Promise<Response> {

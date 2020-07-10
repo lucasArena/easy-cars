@@ -1,4 +1,4 @@
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, Repository, Raw } from 'typeorm';
 
 import ITransactionsRepository from '@interfaces/transactions/ITransactionsRepository';
 import IIndexTransaction from '@interfaces/transactions/IIndexTransaction';
@@ -13,8 +13,22 @@ class TransactionsRepository implements ITransactionsRepository {
     this.repository = getRepository(Transaction);
   }
 
-  public async index(_: IIndexTransaction): Promise<ITransaction[]> {
-    const transactions = await this.repository.find();
+  public async index({
+    day,
+    month,
+    year,
+  }: IIndexTransaction): Promise<ITransaction[]> {
+    const parsedMonth = String(month).padStart(2, '0');
+    const parsedDay = String(day).padStart(2, '0');
+
+    const transactions = await this.repository.find({
+      where: {
+        created_at: Raw(
+          dateFieldName =>
+            `${dateFieldName} BETWEEN '${year}-${parsedMonth}-${parsedDay} 00:00:00' AND '${year}-${parsedMonth}-${parsedDay} 23:59:59'`,
+        ),
+      },
+    });
 
     return transactions;
   }

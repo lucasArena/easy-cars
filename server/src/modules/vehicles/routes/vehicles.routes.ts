@@ -12,8 +12,9 @@ const vehicleTypesController = new VehicleTypesController();
 
 router.use(ensureAuthenticated);
 
-router.get('/', vehiclesController.index);
 router.get('/types', vehicleTypesController.index);
+router.get('/:id', vehiclesController.find);
+router.get('/', vehiclesController.index);
 router.post(
   '/',
   celebrate({
