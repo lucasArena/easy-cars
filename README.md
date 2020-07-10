@@ -72,13 +72,23 @@ To start the app's back-end,  you need to acess the server folder, install de de
 $ cd server
 
 # Install the dependencies packages (you can use npm as well)
-yarn install
+$ yarn install
 
 # Run the migrations to create the table on archive database.sqlite
-yarn dev:typeorm migration:run
+$ yarn typeorm migration:run
 
 # Start back-end server
-yarn dev:server
+$ yarn dev:server
+```
+
+If you want to run the automated tests just run the comand below on the server folder
+
+```bash
+# Enter in the server folder 
+$ cd server
+
+# Run automated tests
+$ yarn test
 ```
 
 To start the frontend's app, you need to acess the web folder, install de dependecies execute the command to start the application
@@ -88,10 +98,10 @@ To start the frontend's app, you need to acess the web folder, install de depend
 $ cd web
 
 # Install the dependencies packages (you can use npm as well)
-yarn install
+$ yarn install
 
 # Start front-end
-yarn start
+$ yarn start
 ```
 
 ## API documentation
